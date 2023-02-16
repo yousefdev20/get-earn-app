@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::view('dashboard', 'welcome');
+
+Route::prefix('dashboard')->group(function () {
+    Route::fallback(function () {
+        return view('welcome');
+    });
+});
+
+Route::fallback(function () {
     return view('welcome');
 });
