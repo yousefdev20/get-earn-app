@@ -1,0 +1,69 @@
+version: '3'
+services:
+
+    get-earn-app:
+        build:
+            context: ./docker
+            dockerfile: Dockerfile
+        image: get-earn-app
+        container_name: GetEarnApp
+        ports:
+            - '${APP_PORT:-80}:80'
+        volumes:
+            - '.:/var/www/html/GetEarnApp'
+        networks:
+            - get-earn-app
+        depends_on:
+            - mysql
+            - redis
+
+    mysql:
+        image: 'mysql/mysql-server:8.0'
+        container_name: GetEarnApp-MySQL
+        ports:
+            - '${FORWARD_DB_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-yousef}'
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: '${DB_DATABASE:-get_earn_app}'
+            MYSQL_USER: '${DB_USERNAME:-yousef}'
+            MYSQL_PASSWORD: '${DB_PASSWORD:-yousef}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - 'get-earn-app-mysql:/var/lib/mysql'
+        networks:
+            - get-earn-app
+
+    mysql-testing:
+        image: 'mysql/mysql-server:8.0'
+        container_name: GetEarnApp-MySQL-Testing
+        ports:
+            - '33061:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: 'yousef'
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: 'testing'
+            MYSQL_USER: 'yousef'
+            MYSQL_PASSWORD: 'yousef'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        networks:
+            - get-earn-app
+
+    redis:
+        image: 'redis:alpine'
+        container_name: GetEarnApp-redis
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'get-earn-app-redis:/data'
+        networks:
+            - get-earn-app
+
+networks:
+    get-earn-app:
+        driver: bridge
+volumes:
+    get-earn-app-mysql:
+        driver: local
+    get-earn-app-redis:
+        driver: local
