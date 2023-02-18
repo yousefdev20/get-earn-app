@@ -29,7 +29,7 @@ class RegisterStoreRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users'],
             'phone' => ['required', 'unique:users'],
             'birth_date' => ['nullable'],
-            'image' => ['required', 'max:5048', 'mimes:png,jpg,jpeg'],
+            'image' => ['required', 'max:5000', 'mimes:png,jpg,jpeg'],
             'password' => [
                 'required',
                 'min:8',

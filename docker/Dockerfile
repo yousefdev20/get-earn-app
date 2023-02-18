@@ -32,6 +32,8 @@ RUN apt-get update \
     && npm install -g npm \
     && apt-get update \
     && apt-get install -y mysql-client \
+    && apt-get install -y redis-tools \
+    && apt-get install -y net-tools \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

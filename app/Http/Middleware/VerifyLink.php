@@ -3,22 +3,32 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 
 class VerifyLink
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Closure(Request): (Response|RedirectResponse) $next
+     * @return Response|RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
-        if ($request->link) {
-            return $next($request);
+        try {
+            $user = User::query()->where('phone', decrypt($request->referred_by));
+            $userExists = $user->exists();
+            if ($userExists) {
+                $request->merge(['referred_by' => $user->first()->id]);
+                return $next($request);
+            }
+            abort(404);
+        } catch (\Exception $exception) {
+            abort(404);
         }
-        abort(404);
     }
 }

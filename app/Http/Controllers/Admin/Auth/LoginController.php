@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\AdminResource;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -20,6 +20,6 @@ class LoginController extends Controller
             return $this->response(JsonResource::make(['message' => __('auth.failed')]), 401);
         }
         $admin['token'] = $admin->createToken('admin')->plainTextToken;
-        return $this->response(new UserResource($admin));
+        return $this->response(new AdminResource($admin));
     }
 }

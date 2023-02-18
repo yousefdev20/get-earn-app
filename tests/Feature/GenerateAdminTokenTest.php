@@ -14,7 +14,7 @@ class GenerateAdminTokenTest extends TestCase
     public function CheckTheGenerateAdminTokenRunning(): void
     {
         $this->seed();
-        $response = $this->post('api/login', ['phone' => '0790000000', 'password' => 'admin']);
+        $response = $this->post('api/admin/login', ['phone' => '0790000000', 'password' => 'admin']);
 
         $response->assertStatus(200)->assertJson(fn(AssertableJson $json) =>
             $json->has('data.token')->hasAll(['data.name', 'data.email', 'data.id', 'data.phone', 'data.image'])

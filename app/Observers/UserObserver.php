@@ -16,10 +16,7 @@ class UserObserver
     public function created(User $user): void
     {
         $user->wallet()->create();
-        if ($user->referred_by) {
-            $referredBy = User::query()->withCount(['referrals'])->find($user->referred_by);
-            $referredBy->wallet()->update(['points' => EarnedPoints::calculate($referredBy['referrals_count'])]);
-        }
+        $this->refreshWallet($user->referred_by);
     }
 
     /**
@@ -30,7 +27,8 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        $user->wallet()->forceDelete();
+        $user->wallet()->delete();
+        $this->refreshWallet($user->referred_by);
     }
 
     /**
@@ -39,9 +37,10 @@ class UserObserver
      * @param User $user
      * @return void
      */
-    public function restored(User $user)
+    public function restored(User $user): void
     {
-        //
+        $user->wallet()->restore();
+        $this->refreshWallet($user->referred_by);
     }
 
     /**
@@ -50,8 +49,17 @@ class UserObserver
      * @param User $user
      * @return void
      */
-    public function forceDeleted(User $user)
+    public function forceDeleted(User $user): void
     {
-        //
+        $user->wallet()->delete();
+        $this->refreshWallet($user->referred_by);
+    }
+
+    private function refreshWallet(?int $id): void
+    {
+        if ($id) {
+            $referredBy = User::query()->withCount(['referrals'])->find($id);
+            $referredBy->wallet()->update(['points' => EarnedPoints::calculate($referredBy['referrals_count'])]);
+        }
     }
 }
