@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Services\Wallet\EarnedPoints;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -81,6 +82,13 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn ($value, $attributes) => $attributes['deleted_at'] ? 'blocked' : 'active',
+        );
+    }
+
+    public function link(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => route('referred_by', encrypt($this->phone)),
         );
     }
 }

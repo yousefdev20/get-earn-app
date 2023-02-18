@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Config;
 
 class EarnedPoints
 {
-    static public function calculate(int $referralsCount): int
+    static public function calculate(?int $referralsCount): int
     {
-        $config = Config::get('e-wallet');
+        $config = Config::get('e-wallet.points');
         return match (true) {
             $referralsCount <= 0 => 0,
             $referralsCount >= $config[0]['from'] && $referralsCount <= $config[0]['to'] => $config[0]['points'],
