@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
@@ -71,24 +72,46 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'referred_by');
     }
 
+    public function visitors(): HasOne
+    {
+        return $this->hasOne(Visitor::class, 'refereed_by');
+    }
+
+
+    public function referredUsers()
+    {
+        return DB::select('WITH RECURSIVE referrals_tree AS
+        (
+        SELECT id, name, email, referred_by, created_at, deleted_at, phone
+        FROM users
+         WHERE referred_by = ' . $this->id . '
+          UNION ALL SELECT u.id, u.name, u.email, u.referred_by, u.created_at, u.deleted_at, u.phone
+           FROM users
+            u INNER JOIN referrals_tree rt ON u.referred_by = rt.id
+             )
+             SELECT id, name, email, referred_by, created_at, deleted_at, phone
+              FROM referrals_tree
+              ');
+    }
+
     public function image(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => url($value),
+            get: fn($value) => url($value),
         );
     }
 
     public function status(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => $attributes['deleted_at'] ? 'blocked' : 'active',
+            get: fn($value, $attributes) => $attributes['deleted_at'] ? 'blocked' : 'active',
         );
     }
 
     public function link(): Attribute
     {
         return Attribute::make(
-            get: fn () => route('referred_by', encrypt($this->phone)),
+            get: fn() => encrypt($this->phone),
         );
     }
 }

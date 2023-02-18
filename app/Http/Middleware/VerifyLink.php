@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
-use Exception;
-use Illuminate\Http\RedirectResponse;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 
 class VerifyLink
 {
@@ -27,9 +26,9 @@ class VerifyLink
                 $request->merge(['referred_by' => $user->first()->id]);
                 return $next($request);
             }
-        } catch (Exception $exception) {
+            abort(404);
+        } catch (\Exception $exception) {
             abort(404);
         }
-        abort(404);
     }
 }

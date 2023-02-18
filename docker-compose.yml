@@ -8,7 +8,7 @@ services:
         image: get-earn-app
         container_name: GetEarnApp
         ports:
-            - '${APP_PORT:-80}:80'
+            - '${APP_PORT:-86}:80'
         volumes:
             - '.:/var/www/html/GetEarnApp'
         networks:
@@ -21,7 +21,7 @@ services:
         image: 'mysql/mysql-server:8.0'
         container_name: GetEarnApp-MySQL
         ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+            - '${FORWARD_DB_PORT:-33066}:3306'
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-yousef}'
             MYSQL_ROOT_HOST: '%'
@@ -38,7 +38,7 @@ services:
         image: 'mysql/mysql-server:8.0'
         container_name: GetEarnApp-MySQL-Testing
         ports:
-            - '33061:3306'
+            - '33067:3306'
         environment:
             MYSQL_ROOT_PASSWORD: 'yousef'
             MYSQL_ROOT_HOST: '%'
@@ -53,7 +53,7 @@ services:
         image: 'redis:alpine'
         container_name: GetEarnApp-redis
         ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
+            - '${FORWARD_REDIS_PORT:-63796}:6379'
         volumes:
             - 'get-earn-app-redis:/data'
         networks:

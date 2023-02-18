@@ -55,7 +55,7 @@ class UserObserver
         $this->refreshWallet($user->referred_by);
     }
 
-    private function refreshWallet(int $id): void
+    private function refreshWallet(?int $id): void
     {
         if ($id) {
             $referredBy = User::query()->withCount(['referrals'])->find($id);

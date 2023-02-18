@@ -2,20 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UsersResource;
+use App\Http\Resources\ReferredUsersResource;
 use App\Models\User;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return UsersResource|Response
-     */
-    public function index(): UsersResource|Response
+    public function referredUsers(): Response
     {
-        return (new UsersResource(User::query()->withCount(['referrals'])->simplePaginate(10)));
+        return $this->response(new ReferredUsersResource(User::query()->find(auth()->id())->referredUsers()));
     }
 
     /**
