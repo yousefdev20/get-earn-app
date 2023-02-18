@@ -53,8 +53,11 @@ docker exec -it GetEarnApp php artisan config:cache
 3. VueRouter
 4. Apexcharts
 
-
 ### Finally, Type this command (all in one)
 ```
 make 
 ```
+### References
+There is directory in this project is api-collection that have postman collection with full documentation. 
+
+Thanks.
