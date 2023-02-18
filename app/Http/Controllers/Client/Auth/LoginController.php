@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)//: Response
+    public function login(Request $request): Response
     {
         if (Auth::attempt($request->only(['phone', 'password']))) {
             $user = Auth::user();
