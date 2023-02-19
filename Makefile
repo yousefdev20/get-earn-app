@@ -1,4 +1,4 @@
-all: run_docker install_composer_dependencies generate_dot_env_file generate_app_key database_migration database_run_seeder delete_cache re_cache print_remote_address_to_start restart_docker
+all: run_docker install_composer_dependencies generate_dot_env_file generate_app_key database_migration database_run_seeder delete_cache re_cache restart_docker print_remote_address_to_start
 
 run_docker:
 	docker-compose up -d --build
