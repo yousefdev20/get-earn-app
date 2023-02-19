@@ -58,6 +58,11 @@ docker exec -it GetEarnApp php artisan config:cache
 ```
 make 
 ```
+### Admin credentials
+```
+Username: 0790000000
+Password: admin
+```
 ### References
 There is directory in this project is api-collection that have postman collection with full documentation. 
 
