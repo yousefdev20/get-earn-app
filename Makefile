@@ -29,7 +29,7 @@ re_cache:
 	docker exec -it GetEarnApp php artisan config:cache
 
 restart_docker:
-    docker-compose down && docker-compose up -d --build
+	docker-compose down && docker-compose up -d --build
 
 print_remote_address_to_start:
 	echo "http://localhost:86"
