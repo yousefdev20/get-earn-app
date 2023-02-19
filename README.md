@@ -44,6 +44,7 @@ docker exec -it GetEarnApp php artisan config:cache
 2. MySQL -v 8.0
 3. Supervisord or any web service
 4. Redis server
+5. Docker and docker-compose
 
 
 ### **Front-end Services**
